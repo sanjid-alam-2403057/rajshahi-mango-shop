@@ -583,7 +583,84 @@ function setupRipple() {
     });
   }
 
+// ════════════════════════════════════════
+// HERO ENHANCEMENTS
+// ════════════════════════════════════════
+const hero = document.querySelector('.hero');
 
+// Cursor-following orb
+const cursorOrb = document.getElementById('cursorOrb');
+if (hero && cursorOrb) {
+  hero.addEventListener('mousemove', (e) => {
+    const rect = hero.getBoundingClientRect();
+    cursorOrb.style.left = (e.clientX - rect.left) + 'px';
+    cursorOrb.style.top  = (e.clientY - rect.top)  + 'px';
+  });
+  hero.addEventListener('mouseleave', () => {
+    cursorOrb.style.left = '75%';
+    cursorOrb.style.top  = '40%';
+  });
+}
+
+// Animated stat counters
+function animateCounter(el, target, duration = 1800) {
+  let start = null;
+  const isK = String(target).includes('k');
+  const num  = parseFloat(target);
+  const suffix = isK ? 'k+' : (String(target).includes('%') ? '%' : '+');
+  el.classList.add('counting');
+  function step(ts) {
+    if (!start) start = ts;
+    const progress = Math.min((ts - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.floor(ease * num) + suffix;
+    if (progress < 1) requestAnimationFrame(step);
+    else { el.textContent = target; el.classList.remove('counting'); }
+  }
+  requestAnimationFrame(step);
+}
+
+const statsObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    document.querySelectorAll('.stat-num').forEach(el => {
+      animateCounter(el, el.textContent.trim());
+    });
+    statsObserver.disconnect();
+  });
+}, { threshold: 0.5 });
+const firstStat = document.querySelector('.stat-num');
+if (firstStat) statsObserver.observe(firstStat);
+
+// Clickable variety chips → swap showcase emoji
+const chipEmojis = {
+  'Himsagor':   '🥭',
+  'Amrupali':   '🥭',
+  'Langra':     '🍃',
+  'Khirshapat': '✨',
+};
+const showcaseEl = document.getElementById('showcaseEmoji');
+document.querySelectorAll('.variety-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.variety-chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    if (!showcaseEl) return;
+    showcaseEl.classList.add('swap');
+    setTimeout(() => {
+      showcaseEl.textContent = chipEmojis[chip.textContent.trim()] || '🥭';
+      showcaseEl.classList.remove('swap');
+    }, 350);
+  });
+});
+
+// Hide scroll hint after user scrolls
+const scrollHint = document.querySelector('.hero-scroll-hint');
+if (scrollHint) {
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 80) scrollHint.style.opacity = '0';
+    else scrollHint.style.opacity = '0.45';
+  }, { passive: true });
+}
   // ════════════════════════════════════════════════════════
   // 7. STICKY NAV
   // ════════════════════════════════════════════════════════
