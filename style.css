@@ -1913,3 +1913,90 @@ footer {
   margin-left: 4px;
   font-weight: 400;
 }
+/* HERO PARALLAX ORB — follows cursor */
+.hero-cursor-orb {
+  position: absolute;
+  width: 320px; height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(245,200,74,0.13), transparent 70%);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: left 0.12s ease, top 0.12s ease;
+  z-index: 1;
+}
+
+/* STAT NUMBER ANIMATION */
+.stat-num {
+  transition: color 0.3s;
+}
+.stat-num.counting { color: var(--mango); }
+
+/* VARIETY CHIPS — clickable */
+.variety-chip {
+  cursor: pointer;
+  transition: background 0.25s, border-color 0.25s,
+              color 0.25s, transform 0.3s var(--ease-spring),
+              box-shadow 0.25s;
+}
+.variety-chip:hover,
+.variety-chip.active {
+  background: rgba(245,200,74,0.22);
+  border-color: var(--sun);
+  color: var(--white);
+  box-shadow: 0 4px 18px rgba(245,200,74,0.25);
+  transform: scale(1.08) translateY(-4px);
+}
+
+/* MANGO SHOWCASE — variety swap */
+.showcase-center {
+  transition: transform 0.35s var(--ease-spring), filter 0.35s;
+}
+.showcase-center.swap {
+  transform: scale(0.7) rotate(0deg);
+  filter: blur(4px) drop-shadow(0 22px 44px rgba(0,0,0,0.42));
+}
+
+/* HERO SCROLL INDICATOR */
+.hero-scroll-hint {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  opacity: 0.45;
+  animation: fadeUp 1s 1s var(--ease) both;
+  pointer-events: none;
+}
+.hero-scroll-hint span {
+  font-size: 0.60rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+}
+.scroll-line {
+  width: 1.5px;
+  height: 36px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.5), transparent);
+  animation: scrollLine 1.8s ease-in-out infinite;
+}
+@keyframes scrollLine {
+  0%   { transform: scaleY(0); transform-origin: top; opacity: 1; }
+  50%  { transform: scaleY(1); transform-origin: top; opacity: 1; }
+  51%  { transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+}
+
+/* STAT CARD HOVER */
+.stat {
+  cursor: default;
+  transition: border-color 0.25s, transform 0.25s var(--ease-spring);
+}
+.stat:hover {
+  border-left-color: var(--sun);
+  transform: translateY(-3px);
+}
