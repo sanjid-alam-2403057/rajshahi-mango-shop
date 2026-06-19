@@ -332,7 +332,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!el) return;
     const total = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
     const lines = cart.map(i => `<strong>${i.name}</strong> × ${i.qty} kg = ৳${i.price * i.qty}`).join('<br>');
-    el.innerHTML = lines + `<br><strong>Total: ৳$ {total}</strong>`;
+    el.innerHTML = lines + `<br><strong>Total: ৳${total}</strong>`;
   }
 
 
