@@ -1,162 +1,312 @@
 document.addEventListener('DOMContentLoaded', () => {
-    
-    // ════════════════════════════════
-    // 1. FETCH & RENDER PRODUCTS FROM data.json
-    // ════════════════════════════════
-    const productsGrid = document.getElementById('productsGrid');
 
-    if (productsGrid) {
-        fetch('data.json')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Could not fetch the product data.');
-                }
-                return response.json();
-            })
-            .then(products => {
-                // Clear the default loading placeholder text
-                productsGrid.innerHTML = '';
+  // ════════════════════════════════════════════════════════
+  // 1. FETCH & RENDER PRODUCTS FROM data.json
+  // ════════════════════════════════════════════════════════
+  const productsGrid = document.getElementById('productsGrid');
 
-                // Generate HTML cards dynamically for each product found in JSON
-                products.forEach(product => {
-                    const tagsHTML = product.tags.map(tag => `<span class="p-tag">${tag}</span>`).join('');
-                    
-                    const cardHTML = `
-                        <div class="p-card sr">
-                            <div class="p-badge badge-${product.badgeColor || 'green'}">${product.badge}</div>
-                            <div class="p-thumb">${product.icon || '🥭'}</div>
-                            <div class="p-body">
-                                <h3 class="p-name">${product.name}</h3>
-                                <p class="p-name-bn">${product.nameBn}</p>
-                                <div class="p-tags">
-                                    ${tagsHTML}
-                                </div>
-                                <p class="p-desc">${product.description}</p>
-                                <div class="p-footer">
-                                    <div class="p-price">৳${product.price} <span>${product.unit || '/ kg'}</span></div>
-                                    <button class="p-btn">Add to Cart</button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    productsGrid.insertAdjacentHTML('beforeend', cardHTML);
-                });
+  if (productsGrid) {
 
-                // Initialize animations and interactive buttons AFTER cards are injected into the DOM
-                setupScrollReveal();
-                setupCartHandlers();
-            })
-            .catch(error => {
-                console.error('Error rendering products:', error);
-                productsGrid.innerHTML = '<p style="color: var(--muted);">Failed to load fresh mangoes. Please ensure you are using a local server environment.</p>';
-                
-                // Fallback: still reveal the rest of the static elements if the database fails
-                setupScrollReveal();
-            });
-    } else {
+    // Show skeleton loaders while fetching
+    showSkeletons(productsGrid, 6);
+
+    fetch('data.json')
+      .then(res => {
+        if (!res.ok) throw new Error('Could not fetch product data.');
+        return res.json();
+      })
+      .then(products => {
+        productsGrid.innerHTML = '';
+
+        products.forEach(product => {
+          const tagsHTML = product.tags
+            .map(tag => `<span class="p-tag">${tag}</span>`)
+            .join('');
+
+          // Disable button and change label for unavailable products
+          const btnLabel    = product.available ? 'Add to Cart' : product.badge;
+          const btnDisabled = product.available ? '' : 'disabled';
+          const btnStyle    = product.available ? '' : 'style="background: var(--badge-gray); cursor: not-allowed; box-shadow: none;"';
+
+          // Season tag shown as small label on card
+          const seasonHTML = product.season
+            ? `<span class="p-season">${product.season}</span>`
+            : '';
+
+          const cardHTML = `
+            <div class="p-card sr">
+              <div class="p-thumb ${product.bgClass || 'bg-default'}">
+                ${product.icon || '🥭'}
+                <span class="p-badge badge-${product.badgeColor || 'green'}">${product.badge}</span>
+              </div>
+              <div class="p-body">
+                <div class="p-name-row">
+                  <h3 class="p-name">${product.name}</h3>
+                  ${seasonHTML}
+                </div>
+                <p class="p-name-bn">${product.nameBn}</p>
+                <div class="p-tags">${tagsHTML}</div>
+                <p class="p-desc">${product.description}</p>
+                <div class="p-footer">
+                  <div class="p-price">৳${product.price} <span>${product.unit || '/ kg'}</span></div>
+                  <div class="p-actions">
+                    <button class="p-btn" data-id="${product.id}" data-name="${product.name}" data-price="${product.price}" ${btnDisabled} ${btnStyle}>
+                      ${btnLabel}
+                    </button>
+                    <button class="p-whatsapp-btn" data-name="${product.name}" data-price="${product.price}" title="Order via WhatsApp">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                        <path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.126 1.533 5.858L0 24l6.335-1.513A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.002-1.366l-.359-.214-3.761.898.938-3.65-.234-.374A9.818 9.818 0 112 12c0-5.414 4.404-9.818 9.818-9.818 5.415 0 9.818 4.404 9.818 9.818 0 5.415-4.403 9.818-9.818 9.818z"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+
+          productsGrid.insertAdjacentHTML('beforeend', cardHTML);
+        });
+
+        // Wire up interactions after cards are in the DOM
+        setupCartHandlers();
+        setupWhatsAppHandlers();
         setupScrollReveal();
+      })
+      .catch(err => {
+        console.error('Product load error:', err);
+        productsGrid.innerHTML = `
+          <p style="color:var(--muted); grid-column:1/-1; text-align:center; padding:40px 0;">
+            ⚠️ Failed to load products. Please run this on a local server (e.g. VS Code Live Server).
+          </p>`;
+        setupScrollReveal();
+      });
+
+  } else {
+    // No products grid on this page — still run reveal for static elements
+    setupScrollReveal();
+  }
+
+
+  // ════════════════════════════════════════════════════════
+  // 2. SKELETON LOADERS
+  // ════════════════════════════════════════════════════════
+  function showSkeletons(grid, count) {
+    grid.innerHTML = '';
+    for (let i = 0; i < count; i++) {
+      grid.insertAdjacentHTML('beforeend', `
+        <div class="p-skeleton">
+          <div class="p-skeleton-thumb"></div>
+          <div class="p-skeleton-body">
+            <div class="p-skeleton-line med"></div>
+            <div class="p-skeleton-line short"></div>
+            <div class="p-skeleton-line med"></div>
+            <div class="p-skeleton-line short"></div>
+          </div>
+        </div>
+      `);
+    }
+  }
+
+
+  // ════════════════════════════════════════════════════════
+  // 3. CART SYSTEM
+  // ════════════════════════════════════════════════════════
+  let cart = [];
+
+  function setupCartHandlers() {
+    document.querySelectorAll('.p-btn:not([disabled])').forEach(btn => {
+      btn.addEventListener('click', function () {
+        const id    = this.dataset.id;
+        const name  = this.dataset.name;
+        const price = parseInt(this.dataset.price);
+
+        // Add to cart array
+        const existing = cart.find(item => item.id === id);
+        if (existing) {
+          existing.qty += 1;
+        } else {
+          cart.push({ id, name, price, qty: 1 });
+        }
+
+        updateCartBadge();
+        showAddedFeedback(this);
+      });
+    });
+  }
+
+  function updateCartBadge() {
+    const total = cart.reduce((sum, item) => sum + item.qty, 0);
+    let badge = document.getElementById('cartBadge');
+
+    if (!badge) {
+      // Create badge on first add
+      const navBtn = document.querySelector('.btn-nav');
+      if (navBtn) {
+        badge = document.createElement('span');
+        badge.id = 'cartBadge';
+        badge.style.cssText = `
+          position: absolute;
+          top: -7px; right: -7px;
+          background: var(--moss);
+          color: #fff;
+          font-size: 0.62rem;
+          font-weight: 800;
+          width: 18px; height: 18px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          pointer-events: none;
+          line-height: 1;
+        `;
+        navBtn.style.position = 'relative';
+        navBtn.appendChild(badge);
+      }
     }
 
-    // ════════════════════════════════
-    // 2. STICKY NAVIGATION BAR EFFECT
-    // ════════════════════════════════
-    const mainNav = document.getElementById('mainNav');
+    if (badge) {
+      badge.textContent = total;
+      // Pop animation
+      badge.style.transform = 'scale(1.5)';
+      setTimeout(() => badge.style.transform = 'scale(1)', 200);
+      badge.style.transition = 'transform 0.2s cubic-bezier(0.34,1.56,0.64,1)';
+    }
+  }
+
+  function showAddedFeedback(btn) {
+    const orig = btn.textContent;
+    btn.textContent = '✓ Added!';
+    btn.disabled = true;
+    btn.style.background = 'var(--moss)';
+    btn.style.boxShadow  = 'none';
+
+    setTimeout(() => {
+      btn.textContent    = orig;
+      btn.disabled       = false;
+      btn.style.background = '';
+      btn.style.boxShadow  = '';
+    }, 2000);
+  }
+
+
+  // ════════════════════════════════════════════════════════
+  // 4. WHATSAPP ORDER HANDLER
+  // ════════════════════════════════════════════════════════
+  function setupWhatsAppHandlers() {
+    document.querySelectorAll('.p-whatsapp-btn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        const name  = this.dataset.name;
+        const price = this.dataset.price;
+        const phone = '8801234567890'; // ← Replace with your WhatsApp number
+        const msg   = encodeURIComponent(
+          `হ্যালো! আমি ${name} আম অর্ডার করতে চাই।\nদাম: ৳${price}/kg\n\nআমার অর্ডার কনফার্ম করুন।`
+        );
+        window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+      });
+    });
+  }
+
+
+  // ════════════════════════════════════════════════════════
+  // 5. STICKY NAV SHADOW ON SCROLL
+  // ════════════════════════════════════════════════════════
+  const mainNav = document.getElementById('mainNav');
+  if (mainNav) {
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 40) {
-            mainNav.classList.add('scrolled');
-        } else {
-            mainNav.classList.remove('scrolled');
-        }
+      mainNav.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+  }
+
+
+  // ════════════════════════════════════════════════════════
+  // 6. MOBILE MENU TOGGLE
+  // ════════════════════════════════════════════════════════
+  const navToggle  = document.getElementById('navToggle');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  if (navToggle && mobileMenu) {
+    navToggle.addEventListener('click', () => {
+      navToggle.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
     });
 
-    // ════════════════════════════════
-    // 3. RESPONSIVE MOBILE MENU TOGGLE
-    // ════════════════════════════════
-    const navToggle = document.getElementById('navToggle');
-    const mobileMenu = document.getElementById('mobileMenu');
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navToggle.classList.remove('open');
+        mobileMenu.classList.remove('open');
+      });
+    });
+  }
 
-    if (navToggle && mobileMenu) {
-        navToggle.addEventListener('click', () => {
-            navToggle.classList.toggle('open');
-            mobileMenu.classList.toggle('open');
+
+  // ════════════════════════════════════════════════════════
+  // 7. SCROLL REVEAL  (called only ONCE, after DOM is ready)
+  // ════════════════════════════════════════════════════════
+  function setupScrollReveal() {
+    const srEls = document.querySelectorAll('.sr:not(.in)');
+    if (!srEls.length) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+
+        // Stagger siblings within the same parent grid/row
+        const parent   = entry.target.parentElement;
+        const siblings = parent.querySelectorAll('.sr:not(.in)');
+        siblings.forEach((sib, idx) => {
+          setTimeout(() => sib.classList.add('in'), idx * 90);
         });
 
-        // Close mobile dropdown cleanly when any link inside it is tapped
-        mobileMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                navToggle.classList.remove('open');
-                mobileMenu.classList.remove('open');
-            });
-        });
-    }
+        entry.target.classList.add('in');
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -36px 0px' });
 
-    // ════════════════════════════════
-    // 4. SCROLL REVEAL ANIMATIONS
-    // ════════════════════════════════
-    function setupScrollReveal() {
-        const srEls = document.querySelectorAll('.sr');
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(e => {
-                if (e.isIntersecting) {
-                    const siblings = e.target.parentElement.querySelectorAll('.sr');
-                    siblings.forEach((sib, idx) => {
-                        if (!sib.classList.contains('in')) {
-                            setTimeout(() => sib.classList.add('in'), idx * 80);
-                        }
-                    });
-                    e.target.classList.add('in');
-                    observer.unobserve(e.target);
-                }
-            });
-        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-        
-        srEls.forEach(el => observer.observe(el));
-    }
+    srEls.forEach(el => observer.observe(el));
+  }
 
-    // ════════════════════════════════
-    // 5. ADD TO CART INTERACTION
-    // ════════════════════════════════
-    function setupCartHandlers() {
-        document.querySelectorAll('.p-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const name = this.closest('.p-card').querySelector('.p-name').textContent;
-                const orig = this.textContent;
-                
-                this.textContent = '✓ Added!';
-                this.style.background = 'var(--moss)';
-                this.disabled = true;
-                
-                setTimeout(() => {
-                    this.textContent = orig;
-                    this.style.background = '';
-                    this.disabled = false;
-                }, 2000);
-            });
-        });
-    }
 });
 
-// ════════════════════════════════
-// 6. NEWSLETTER SUBSCRIBE FORM
-// (Kept globally-scoped because index.html utilizes inline 'onclick')
-// ════════════════════════════════
+
+// ════════════════════════════════════════════════════════
+// 8. NEWSLETTER / SUBSCRIBE FORM
+// Global scope — called via inline onclick in index.html
+// ════════════════════════════════════════════════════════
 function handleSubscribe(btn) {
-    const input = btn.previousElementSibling;
-    if (!input.value.trim()) {
-        input.style.borderColor = 'var(--honey)';
-        input.placeholder = 'Please enter your phone or email';
-        input.focus();
-        return;
-    }
-    
-    const origText = btn.textContent;
-    btn.textContent = 'Subscribed! 🎉';
-    btn.disabled = true;
-    input.value = '';
-    
+  const input = btn.previousElementSibling;
+  const value = input.value.trim();
+
+  // Basic validation — must look like a phone or email
+  const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  const isPhone = /^[0-9+\-\s]{7,15}$/.test(value);
+
+  if (!value || (!isEmail && !isPhone)) {
+    input.style.borderColor = '#E84040';
+    input.placeholder = '⚠ Enter a valid email or phone number';
+    input.focus();
+    // Reset border after 2s
     setTimeout(() => {
-        btn.textContent = origText;
-        btn.disabled = false;
-    }, 3000);
+      input.style.borderColor = '';
+      input.placeholder = 'Email or Phone Number';
+    }, 2500);
+    return;
+  }
+
+  // Success state
+  const origText = btn.textContent;
+  btn.textContent  = '✓ Subscribed!';
+  btn.disabled     = true;
+  btn.style.background = 'var(--moss)';
+  input.value      = '';
+  input.disabled   = true;
+  input.style.opacity = '0.5';
+
+  setTimeout(() => {
+    btn.textContent     = origText;
+    btn.disabled        = false;
+    btn.style.background = '';
+    input.disabled      = false;
+    input.style.opacity  = '';
+  }, 4000);
 }
