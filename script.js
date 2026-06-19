@@ -1,7 +1,7 @@
 // ════════════════════════════════════════════════════════
 // CONFIG — your deployed Apps Script URL
 // ════════════════════════════════════════════════════════
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzgflVyjoxoQZJuGPT-RHJ4D-WKE36vsbcasT4L-1gxmJVMrMc_Rvt9gu8KLsfefpnZ/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyvhb_58eiw2icW2oyewjbz2RoN9yYBxiP1xptHYtyUsueK2-BajexQlThllDKVJXQR/exec';
 
 
 document.addEventListener('DOMContentLoaded', () => {
