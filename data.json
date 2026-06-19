@@ -1,0 +1,62 @@
+[
+  {
+    "id": "himsagor-01",
+    "name": "Himsagor",
+    "nameBn": "হিমসাগর",
+    "tags": [
+      "Sweet",
+      "Fiberless"
+    ],
+    "description": "The king of mangoes. Known for its unmatched sweetness and completely fiberless texture.",
+    "price": 120,
+    "unit": "/ kg",
+    "badge": "Available",
+    "badgeColor": "green",
+    "icon": "🥭"
+  },
+  {
+    "id": "amrupali-01",
+    "name": "Amrupali",
+    "nameBn": "আম্রপালি",
+    "tags": [
+      "Juicy",
+      "Aromatic"
+    ],
+    "description": "A very sweet, small to medium-sized mango with a deep orange, fiberless flesh.",
+    "price": 100,
+    "unit": "/ kg",
+    "badge": "Available",
+    "badgeColor": "green",
+    "icon": "🥭"
+  },
+  {
+    "id": "langra-01",
+    "name": "Langra",
+    "nameBn": "ল্যাংড়া",
+    "tags": [
+      "Classic",
+      "Rich Taste"
+    ],
+    "description": "Famous for retaining its green color even when ripe. Extremely juicy with a unique aroma.",
+    "price": 110,
+    "unit": "/ kg",
+    "badge": "Pre-order",
+    "badgeColor": "orange",
+    "icon": "🥭"
+  },
+  {
+    "id": "khirshapat-01",
+    "name": "Khirshapat",
+    "nameBn": "ক্ষীরশাপাত",
+    "tags": [
+      "Premium",
+      "Traditional"
+    ],
+    "description": "One of the most popular and premium varieties from Rajshahi, highly sought after for its rich, creamy flavor.",
+    "price": 130,
+    "unit": "/ kg",
+    "badge": "Coming Soon",
+    "badgeColor": "gray",
+    "icon": "🥭"
+  }
+]
