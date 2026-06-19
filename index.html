@@ -1,318 +1,612 @@
-
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="description"
-            content="Buy chemical-free, garden-fresh Rajshahi mangoes online. Direct from garden to your doorstep across Bangladesh. Himsagor, Khirshapat, Amrupali, Langra and more." />
-        <title>রাজশাহীর আম | Rajshahi Mango — Fresh Mangoes From Garden</title>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Buy chemical-free, garden-fresh Rajshahi mangoes online. Direct from orchard to your doorstep across Bangladesh. Himsagor, Khirshapat, Amrupali, Langra and more." />
+  <meta name="theme-color" content="#3A5A2A" />
 
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Noto+Serif+Bengali:wght@400;600;700&display=swap"
-            rel="stylesheet" />
+  <title>রাজশাহীর আম | Rajshahi Mango — Fresh From the Garden</title>
 
-        <link rel="stylesheet" href="style.css" />
-    </head>
-    <body>
-        <div class="topbar">
-            🌿 <strong>মৌসুম শুরু হয়েছে!</strong> &nbsp;·&nbsp; Mango season is
-            here — Order now, — nationwide delivery within 72 hours
-            &nbsp;·&nbsp; <strong>Free delivery for all product</strong>
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Noto+Serif+Bengali:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Extra styles only for new index.html elements -->
+  <style>
+    /* Season badge on product card */
+    .p-name-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 2px;
+    }
+    .p-season {
+      font-size: 0.60rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--honey);
+      background: rgba(200,131,26,0.10);
+      padding: 3px 9px;
+      border-radius: 40px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* WhatsApp button beside Add to Cart */
+    .p-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .p-whatsapp-btn {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: #25D366;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1),
+                  box-shadow 0.2s ease,
+                  background  0.2s ease;
+      box-shadow: 0 2px 10px rgba(37,211,102,0.30);
+    }
+    .p-whatsapp-btn:hover {
+      background: #1ebe5d;
+      transform: scale(1.12);
+      box-shadow: 0 6px 18px rgba(37,211,102,0.40);
+    }
+
+    /* Season banner inner wrapper (fixes mobile layout) */
+    .season-banner .inner {
+      position: relative;
+      z-index: 1;
+    }
+    .season-banner .btn-primary {
+      display: inline-flex;
+      margin: 0 auto;
+    }
+
+    /* Process step — numbered circle style when text is used */
+    .ps-num-text {
+      font-family: var(--display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--honey);
+    }
+
+    /* Extra review cards grid fix */
+    .reviews-grid {
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+
+    /* WhatsApp floating button */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 999;
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: #25D366;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 24px rgba(37,211,102,0.45);
+      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1),
+                  box-shadow 0.25s ease;
+      cursor: pointer;
+      border: none;
+      font-size: 1.6rem;
+    }
+    .whatsapp-float:hover {
+      transform: scale(1.12) translateY(-3px);
+      box-shadow: 0 12px 32px rgba(37,211,102,0.55);
+    }
+    .whatsapp-float-tooltip {
+      position: fixed;
+      bottom: 96px;
+      right: 28px;
+      z-index: 998;
+      background: var(--soil);
+      color: var(--white);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 10px;
+      white-space: nowrap;
+      opacity: 0;
+      transform: translateY(6px);
+      pointer-events: none;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .whatsapp-float:hover + .whatsapp-float-tooltip,
+    .whatsapp-float-tooltip:hover {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Back to top button */
+    .back-to-top {
+      position: fixed;
+      bottom: 28px;
+      left: 28px;
+      z-index: 999;
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: rgba(43,31,14,0.75);
+      backdrop-filter: blur(8px);
+      color: rgba(255,255,255,0.80);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.12);
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.3s, transform 0.3s,
+                  background 0.2s;
+      pointer-events: none;
+    }
+    .back-to-top.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .back-to-top:hover { background: var(--honey); color: #fff; }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════
+       TOP BAR
+  ══════════════════════════════════════ -->
+  <div class="topbar">
+    🌿 <strong>মৌসুম শুরু হয়েছে!</strong>
+    &nbsp;·&nbsp;
+    Mango season is here — Order now, delivered within 72 hours
+    &nbsp;·&nbsp;
+    <strong>Free delivery on all orders</strong>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       NAVIGATION
+  ══════════════════════════════════════ -->
+  <nav id="mainNav">
+    <div class="nav-inner">
+      <a href="#" class="logo">
+        <span class="logo-mark">Rajshahi<span>Mango</span> 🥭</span>
+        <span class="logo-bn">রাজশাহীর আম — বিশ্বস্ত চাষিদের কাছ থেকে</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#varieties">Varieties</a></li>
+        <li><a href="#why">Our Promise</a></li>
+        <li><a href="#process">How It Works</a></li>
+        <li><a href="#reviews">Reviews</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+
+      <div class="nav-end">
+        <a href="#varieties" class="btn-nav">🛒 Order Now</a>
+      </div>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <!-- Mobile dropdown -->
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#varieties">Varieties</a>
+      <a href="#why">Our Promise</a>
+      <a href="#process">How It Works</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#contact">Contact</a>
+      <a href="#varieties" class="btn-nav">🛒 Order Now</a>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════
+       HERO
+  ══════════════════════════════════════ -->
+  <header class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grain"></div>
+
+    <!-- Decorative leaf SVG -->
+    <svg class="hero-leaf" viewBox="0 0 400 600" xmlns="http://www.w3.org/2000/svg">
+      <path d="M200 580 C200 580 20 400 10 200 C0 0 180 10 200 10 C220 10 400 0 390 200 C380 400 200 580 200 580Z"/>
+    </svg>
+
+    <div class="hero-orb orb-1"></div>
+    <div class="hero-orb orb-2"></div>
+
+    <div class="hero-content">
+      <!-- Left copy -->
+      <div class="hero-left">
+        <span class="hero-eyebrow">Direct from Orchard · Rajshahi, Bangladesh</span>
+
+        <h1>Garden Fresh <em>Mangoes</em></h1>
+
+        <p class="hero-bn">রাসায়নিক মুক্ত, শতভাগ নিরাপদ রাজশাহীর আম</p>
+
+        <p class="hero-desc">
+          Experience the true taste of summer. Hand-picked from our own
+          orchards in Rajshahi and delivered fresh to your doorstep
+          across Bangladesh — no chemicals, no middlemen.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#varieties" class="btn-primary">🛒 Shop Varieties</a>
+          <a href="#process"   class="btn-ghost">How It Works</a>
         </div>
 
-        <nav id="mainNav">
-            <div class="nav-inner">
-                <a href="#" class="logo">
-                    <span class="logo-mark">Rajshahi<span>Mango</span></span>
-                    <span class="logo-bn">রাজশাহীর আম — বিশ্বস্ত চাষিদের কাছ
-                        থেকে 🥭</span>
-                </a>
-                <ul class="nav-links">
-                    <li><a href="#varieties">Varieties</a></li>
-                    <li><a href="#why">Our Promise</a></li>
-                    <li><a href="#process">How It Works</a></li>
-                    <li><a href="#reviews">Reviews</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-                <div class="nav-end">
-                    <a href="#varieties" class="btn-nav">🛒 Order Now</a>
-                </div>
-                <button class="nav-toggle" id="navToggle" aria-label="Menu">
-                    <span></span><span></span><span></span>
-                </button>
-            </div>
-            <div class="mobile-menu" id="mobileMenu">
-                <a href="#varieties">Varieties</a>
-                <a href="#why">Our Promise</a>
-                <a href="#process">How It Works</a>
-                <a href="#reviews">Reviews</a>
-                <a href="#contact">Contact</a>
-            </div>
-        </nav>
+        <div class="hero-stats">
+          <div class="stat">
+            <div class="stat-num">50+</div>
+            <div class="stat-lbl">Orchards</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">10k+</div>
+            <div class="stat-lbl">Happy Customers</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">100%</div>
+            <div class="stat-lbl">Chemical Free</div>
+          </div>
+        </div>
+      </div>
 
-        <header class="hero">
-            <div class="hero-bg"></div>
-            <div class="hero-grain"></div>
-            <svg class="hero-leaf" viewBox="0 0 100 100">
-            </svg>
-            <div class="hero-orb orb-1"></div>
-            <div class="hero-orb orb-2"></div>
+      <!-- Right — animated mango showcase -->
+      <div class="hero-right">
+        <div class="mango-showcase">
+          <div class="showcase-ring"></div>
+          <div class="showcase-ring"></div>
+          <div class="showcase-ring"></div>
+          <div class="showcase-center">🥭</div>
+          <div class="variety-chip chip-1">Himsagor</div>
+          <div class="variety-chip chip-2">Amrupali</div>
+          <div class="variety-chip chip-3">Langra</div>
+          <div class="variety-chip chip-4">Khirshapat</div>
+        </div>
+      </div>
+    </div>
+  </header>
 
-            <div class="hero-content">
-                <div class="hero-left">
-                    <span class="hero-eyebrow">Direct from Orchard</span>
-                    <h1>Garden Fresh <em>Mangoes</em></h1>
-                    <p class="hero-bn">রাসায়নিক মুক্ত, শতভাগ নিরাপদ রাজশাহীর
-                        আম</p>
-                    <p class="hero-desc">Experience the true taste of summer.
-                        Hand-picked from our own orchards in Rajshahi and
-                        delivered directly to your doorstep across
-                        Bangladesh.</p>
-                    <div class="hero-actions">
-                        <a href="#varieties" class="btn-primary">Shop
-                            Varieties</a>
-                        <a href="#process" class="btn-ghost">Learn More</a>
-                    </div>
-                    <div class="hero-stats">
-                        <div class="stat">
-                            <div class="stat-num">50+</div>
-                            <div class="stat-lbl">Orchards</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-num">10k+</div>
-                            <div class="stat-lbl">Happy Customers</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="hero-right">
-                    <div class="mango-showcase">
-                        <div class="showcase-ring"></div>
-                        <div class="showcase-ring"></div>
-                        <div class="showcase-ring"></div>
-                        <div class="showcase-center">🥭</div>
-                        <div class="variety-chip chip-1">Himsagor</div>
-                        <div class="variety-chip chip-2">Amrupali</div>
-                        <div class="variety-chip chip-3">Langra</div>
-                        <div class="variety-chip chip-4">Khirshapat</div>
-                    </div>
-                </div>
-            </div>
-        </header>
+  <!-- ══════════════════════════════════════
+       TRUST SCROLLING STRIP
+  ══════════════════════════════════════ -->
+  <div class="trust" aria-hidden="true">
+    <div class="trust-scroll">
+      <!-- Set 1 -->
+      <div class="trust-item"><span class="icon">✅</span> Chemical Free <div class="trust-dot"></div></div>
+      <div class="trust-item"><span class="icon">🌳</span> Direct from Garden <div class="trust-dot"></div></div>
+      <div class="trust-item"><span class="icon">🚚</span> Nationwide Delivery <div class="trust-dot"></div></div>
+      <div class="trust-item"><span class="icon">📦</span> Safe Packaging <div class="trust-dot"></div></div>
+      <div class="trust-item"><span class="icon">⭐</span> 4.9 / 5 Rating <div class="trust-dot"></div></div>
+      <div class="trust-item"><span class="icon">💬</span> WhatsApp Support <div class="trust-dot"></div></div>
+      <div class="trust-item"><span class="icon">🔄</span> Easy Returns <div class="trust-dot"></div></div>
+      <!-- Set 2 — duplicate for seamless loop -->
+      <div class="trust-item"><span class="icon">✅</span> Chemical Free <div class="trust-dot"></div></div>
+      <div class="trust-item"><span class="icon">🌳</span> Direct from Garden <div class="trust-dot"></div></div>
+      <div class="trust-item"><span class="icon">🚚</span> Nationwide Delivery <div class="trust-dot"></div></div>
+      <div class="trust-item"><span class="icon">📦</span> Safe Packaging <div class="trust-dot"></div></div>
+      <div class="trust-item"><span class="icon">⭐</span> 4.9 / 5 Rating <div class="trust-dot"></div></div>
+      <div class="trust-item"><span class="icon">💬</span> WhatsApp Support <div class="trust-dot"></div></div>
+      <div class="trust-item"><span class="icon">🔄</span> Easy Returns <div class="trust-dot"></div></div>
+    </div>
+  </div>
 
-        <div class="trust">
-            <div class="trust-scroll">
-                <div class="trust-item"><span class="icon">✅</span> Chemical
-                    Free <div class="trust-dot"></div></div>
-                <div class="trust-item"><span class="icon">✅</span> Direct from
-                    Garden <div class="trust-dot"></div></div>
-                <div class="trust-item"><span class="icon">✅</span> Nationwide
-                    Delivery <div class="trust-dot"></div></div>
-                <div class="trust-item"><span class="icon">✅</span> 100% Quality
-                    Assured <div class="trust-dot"></div></div>
-                <div class="trust-item"><span class="icon">✅</span> Chemical
-                    Free <div class="trust-dot"></div></div>
-                <div class="trust-item"><span class="icon">✅</span> Direct from
-                    Garden <div class="trust-dot"></div></div>
-                <div class="trust-item"><span class="icon">✅</span> Nationwide
-                    Delivery <div class="trust-dot"></div></div>
-                <div class="trust-item"><span class="icon">✅</span> 100% Quality
-                    Assured <div class="trust-dot"></div></div>
-            </div>
+  <!-- ══════════════════════════════════════
+       VARIETIES / PRODUCTS
+  ══════════════════════════════════════ -->
+  <section id="varieties" class="section products-section">
+    <div class="inner">
+      <div class="section-head sr">
+        <div>
+          <div class="section-tag">Fresh Harvest</div>
+          <h2 class="section-h">Available <em>Varieties</em></h2>
+          <p class="section-p">
+            Each variety is hand-picked at perfect ripeness and shipped
+            the same day — straight from our orchard to your door.
+          </p>
+        </div>
+        <a href="#contact" class="link-arrow">Custom order →</a>
+      </div>
+
+      <!-- Cards injected by script.js -->
+      <div class="products-grid" id="productsGrid"></div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       WHY CHOOSE US
+  ══════════════════════════════════════ -->
+  <section id="why" class="section why-section">
+    <div class="inner">
+      <div class="section-head sr">
+        <div>
+          <div class="section-tag">Our Promise</div>
+          <h2 class="section-h">Why Choose <em>Us</em></h2>
+          <p class="section-p">
+            We have been growing and delivering Rajshahi mangoes for over
+            a decade. These are the values we never compromise on.
+          </p>
+        </div>
+      </div>
+
+      <div class="why-grid">
+        <div class="why-card sr">
+          <div class="why-icon-wrap">🚫</div>
+          <h3 class="why-title">No Formalin, Ever</h3>
+          <p class="why-body">We guarantee 100% chemical-free mangoes. Ripened naturally on the tree to preserve authentic taste and full nutritional value.</p>
+        </div>
+        <div class="why-card sr">
+          <div class="why-icon-wrap">🌳</div>
+          <h3 class="why-title">Straight from the Garden</h3>
+          <p class="why-body">Plucked from our Rajshahi orchards upon order confirmation. No warehouses, no middlemen — just pure orchard-to-door freshness.</p>
+        </div>
+        <div class="why-card sr">
+          <div class="why-icon-wrap">🚚</div>
+          <h3 class="why-title">Fast & Safe Delivery</h3>
+          <p class="why-body">Export-grade packaging and rapid nationwide delivery ensures your mangoes arrive in pristine condition within 72 hours.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SEASONAL BANNER
+  ══════════════════════════════════════ -->
+  <div class="season-banner sr">
+    <div class="inner">
+      <div class="section-tag" style="justify-content:center; margin-bottom:16px;">
+        <span style="width:22px;height:2px;background:var(--honey);display:inline-block;border-radius:2px;"></span>
+        &nbsp; Mango Season 2025
+      </div>
+      <h2>Taste the <em>Summer</em></h2>
+      <p>
+        Don't miss the finest mangoes of the season. Pre-order now
+        to reserve your fresh batch straight from the orchard.
+      </p>
+      <div class="season-varieties">
+        <span class="sv-chip">🥭 Fazli — Jul–Aug</span>
+        <span class="sv-chip">🥭 Ashwina — Aug–Sep</span>
+        <span class="sv-chip">🥭 Gopalbhog — May</span>
+        <span class="sv-chip">🥭 Himsagor — May–Jun</span>
+        <span class="sv-chip">🥭 Langra — Jun–Jul</span>
+      </div>
+      <a href="#varieties" class="btn-primary">Pre-order Now →</a>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       HOW IT WORKS
+  ══════════════════════════════════════ -->
+  <section id="process" class="section process-section">
+    <div class="inner">
+      <div class="section-head sr" style="justify-content:center; text-align:center;">
+        <div>
+          <div class="section-tag">How It Works</div>
+          <h2 class="section-h">From Tree to <em>Table</em></h2>
+          <p class="section-p" style="margin: 12px auto 0;">
+            A simple four-step journey we've perfected over a decade to
+            get you the freshest mango possible.
+          </p>
+        </div>
+      </div>
+
+      <div class="process-row">
+        <div class="process-step sr">
+          <div class="ps-num">🛒</div>
+          <h3 class="ps-title">You Order</h3>
+          <p class="ps-body">Select your favourite varieties online or via WhatsApp and place your order in minutes.</p>
+        </div>
+        <div class="process-step sr">
+          <div class="ps-num">🌳</div>
+          <h3 class="ps-title">We Harvest</h3>
+          <p class="ps-body">Mangoes are freshly hand-picked from our trees the morning after your order is confirmed.</p>
+        </div>
+        <div class="process-step sr">
+          <div class="ps-num">📦</div>
+          <h3 class="ps-title">Careful Packing</h3>
+          <p class="ps-body">Each mango is individually wrapped and packed in ventilated, eco-friendly export-grade boxes.</p>
+        </div>
+        <div class="process-step sr">
+          <div class="ps-num">🏠</div>
+          <h3 class="ps-title">Delivered Fresh</h3>
+          <p class="ps-body">Your order arrives safely at your doorstep anywhere in Bangladesh within 72 hours.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       CUSTOMER REVIEWS
+  ══════════════════════════════════════ -->
+  <section id="reviews" class="section reviews-section">
+    <div class="inner">
+      <div class="section-head sr">
+        <div>
+          <div class="section-tag">Testimonials</div>
+          <h2 class="section-h">Happy <em>Customers</em></h2>
+          <p class="section-p">
+            Thousands of families across Bangladesh trust us every season.
+            Here's what a few of them say.
+          </p>
+        </div>
+      </div>
+
+      <div class="reviews-grid">
+        <div class="r-card sr">
+          <span class="r-verified">✓ Verified Buyer</span>
+          <span class="r-quote">"</span>
+          <div class="r-stars">★★★★★</div>
+          <p class="r-text">Absolutely the best mangoes I've had this season. Fresh, incredibly sweet, and perfectly packed — not a single bruise.</p>
+          <div class="r-divider"></div>
+          <div class="r-name">Rahim Uddin</div>
+          <div class="r-loc">Dhaka, Bangladesh</div>
         </div>
 
-        <section id="varieties" class="section products-section">
-            <div class="inner">
-                <div class="section-head sr">
-                    <div>
-                        <div class="section-tag">Fresh Harvest</div>
-                        <h2 class="section-h">Available <em>Varieties</em></h2>
-                        <p class="section-p">Explore our selection of premium
-                            mangoes. Each variety is picked at the perfect time
-                            to ensure maximum sweetness.</p>
-                    </div>
-                </div>
-
-                <div class="products-grid" id="productsGrid">
-                    <p>Loading fresh mangoes...</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="why" class="section why-section">
-            <div class="inner">
-                <div class="section-head sr">
-                    <div>
-                        <div class="section-tag">Our Promise</div>
-                        <h2 class="section-h">Why Choose <em>Us</em></h2>
-                    </div>
-                </div>
-                <div class="why-grid">
-                    <div class="why-card sr">
-                        <div class="why-icon-wrap">🚫</div>
-                        <h3 class="why-title">No Formalin</h3>
-                        <p class="why-body">We guarantee 100% chemical-free
-                            mangoes. Ripened naturally to preserve their
-                            authentic taste and nutritional value.</p>
-                    </div>
-                    <div class="why-card sr">
-                        <div class="why-icon-wrap">🌳</div>
-                        <h3 class="why-title">Garden Fresh</h3>
-                        <p class="why-body">Plucked directly from our Rajshahi
-                            orchards upon order confirmation. No middlemen
-                            involved.</p>
-                    </div>
-                    <div class="why-card sr">
-                        <div class="why-icon-wrap">🚚</div>
-                        <h3 class="why-title">Fast Delivery</h3>
-                        <p class="why-body">Secure packaging and rapid
-                            nationwide delivery ensures your mangoes arrive in
-                            pristine condition.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <div class="season-banner sr">
-            <h2>Taste the <em>Summer</em></h2>
-            <p>Don't miss out on the finest mangoes of the season. Pre-order now
-                to reserve your batch.</p>
-            <div class="season-varieties">
-                <span class="sv-chip">Fazli</span>
-                <span class="sv-chip">Ashwina</span>
-                <span class="sv-chip">Gopalbhog</span>
-            </div>
+        <div class="r-card sr">
+          <span class="r-verified">✓ Verified Buyer</span>
+          <span class="r-quote">"</span>
+          <div class="r-stars">★★★★★</div>
+          <p class="r-text">আমি প্রতি বছর এখান থেকে আম কিনি। সত্যিই কোনো রাসায়নিক নেই। বাচ্চারা নিশ্চিন্তে খেতে পারে।</p>
+          <div class="r-divider"></div>
+          <div class="r-name">Karim Hossain</div>
+          <div class="r-loc">Chittagong, Bangladesh</div>
         </div>
 
-        <section id="process" class="section process-section">
-            <div class="inner">
-                <div class="section-head sr">
-                    <div>
-                        <div class="section-tag">How It Works</div>
-                        <h2 class="section-h">From Tree to <em>Table</em></h2>
-                    </div>
-                </div>
-                <div class="process-row">
-                    <div class="process-step sr">
-                        <div class="ps-num">1</div>
-                        <h3 class="ps-title">You Order</h3>
-                        <p class="ps-body">Select your favorite varieties and
-                            place an order.</p>
-                    </div>
-                    <div class="process-step sr">
-                        <div class="ps-num">2</div>
-                        <h3 class="ps-title">We Harvest</h3>
-                        <p class="ps-body">Mangoes are freshly plucked from the
-                            trees.</p>
-                    </div>
-                    <div class="process-step sr">
-                        <div class="ps-num">3</div>
-                        <h3 class="ps-title">Careful Packing</h3>
-                        <p class="ps-body">Packed securely in eco-friendly
-                            baskets.</p>
-                    </div>
-                    <div class="process-step sr">
-                        <div class="ps-num">4</div>
-                        <h3 class="ps-title">Delivery</h3>
-                        <p class="ps-body">Delivered safely to your
-                            doorstep.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <div class="r-card sr">
+          <span class="r-verified">✓ Verified Buyer</span>
+          <span class="r-quote">"</span>
+          <div class="r-stars">★★★★★</div>
+          <p class="r-text">Ordered 10 kg of Khirshapat for our family gathering. Every single mango was perfect — the aroma filled the entire room!</p>
+          <div class="r-divider"></div>
+          <div class="r-name">Sharmin Begum</div>
+          <div class="r-loc">Sylhet, Bangladesh</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-        <section id="reviews" class="section reviews-section">
-            <div class="inner">
-                <div class="section-head sr">
-                    <div>
-                        <div class="section-tag">Testimonials</div>
-                        <h2 class="section-h">Happy <em>Customers</em></h2>
-                    </div>
-                </div>
-                <div class="reviews-grid">
-                    <div class="r-card sr">
-                        <span class="r-verified">Verified Buyer</span>
-                        <span class="r-quote">"</span>
-                        <div class="r-stars">★★★★★</div>
-                        <p
-                            class="r-text">"Absolutely the best mangoes I've had this season. Fresh, sweet, and perfectly packed."</p>
-                        <div class="r-divider"></div>
-                        <div class="r-name">Rahim Uddin</div>
-                        <div class="r-loc">Dhaka, Bangladesh</div>
-                    </div>
-                </div>
-            </div>
-        </section>
+  <!-- ══════════════════════════════════════
+       CONTACT / NEWSLETTER
+  ══════════════════════════════════════ -->
+  <section id="contact" class="contact-section">
+    <div class="contact-inner sr">
+      <div class="section-tag">Stay Updated</div>
+      <h2 class="section-h">Get Notified When <em style="color:var(--sun);">Season Opens</em></h2>
+      <p class="section-p">
+        Mango season is short. Leave your number or email and we'll
+        message you the moment we start taking orders.
+      </p>
 
-        <section id="contact" class="contact-section">
-            <div class="contact-inner sr">
-                <div class="section-tag">Stay Updated</div>
-                <h2 class="section-h">Subscribe for Offers</h2>
-                <p class="section-p">Enter your email or phone number to get
-                    updates on new harvests and exclusive discounts.</p>
-                <div class="contact-form">
-                    <input type="text" class="contact-input"
-                        placeholder="Email or Phone Number" />
-                    <button class="btn-submit"
-                        onclick="handleSubscribe(this)">Subscribe</button>
-                </div>
-                <div class="contact-alts">
-                    <a href="#" class="contact-alt"><span class="icon">📞</span>
-                        +880 1234 567890</a>
-                    <a href="#" class="contact-alt"><span class="icon">✉️</span>
-                        info@rajshahimango.com</a>
-                </div>
-            </div>
-        </section>
+      <div class="contact-form">
+        <input
+          type="text"
+          class="contact-input"
+          id="subscribeInput"
+          placeholder="Email or Phone Number"
+          autocomplete="off"
+        />
+        <button class="btn-submit" onclick="handleSubscribe(this)">
+          Notify Me
+        </button>
+      </div>
 
-        <footer>
-            <div class="footer-inner">
-                <div class="footer-brand">
-                    <span class="logo-mark">Rajshahi<span>Mango</span></span>
-                    <p>Bringing the authentic taste of Rajshahi mangoes directly
-                        to your home. 100% natural, chemical-free, and
-                        garden-fresh.</p>
-                    <div class="footer-socials">
-                        <a href="#">Fb</a>
-                        <a href="#">Ig</a>
-                        <a href="#">Wa</a>
-                    </div>
-                </div>
-                <div class="footer-col">
-                    <h5>Quick Links</h5>
-                    <ul>
-                        <li><a href="#varieties">Shop Mangoes</a></li>
-                        <li><a href="#why">Why Us</a></li>
-                        <li><a href="#process">Our Process</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h5>Legal</h5>
-                    <ul>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                        <li><a href="#">Refund Policy</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h5>Support</h5>
-                    <ul>
-                        <li><a href="#">FAQ</a></li>
-                        <li><a href="#contact">Contact Us</a></li>
-                        <li><a href="#">Delivery Info</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <div>&copy; 2026 Rajshahi Mango. All rights reserved.</div>
-                <div>Designed with ❤️ in Bangladesh</div>
-            </div>
-        </footer>
+      <div class="contact-alts">
+        <a href="tel:+8801234567890" class="contact-alt">
+          <span class="icon">📞</span> +880 1234 567890
+        </a>
+        <a href="https://wa.me/8801234567890" target="_blank" rel="noopener" class="contact-alt">
+          <span class="icon">💬</span> WhatsApp Us
+        </a>
+        <a href="mailto:info@rajshahimango.com" class="contact-alt">
+          <span class="icon">✉️</span> info@rajshahimango.com
+        </a>
+      </div>
+    </div>
+  </section>
 
-        <script src="script.js"></script>
-    </body>
+  <!-- ══════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════ -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="logo-mark">Rajshahi<span>Mango</span> 🥭</span>
+        <p>
+          Bringing the authentic taste of Rajshahi mangoes directly
+          to your home. 100% natural, chemical-free, and garden-fresh
+          since 2013.
+        </p>
+        <div class="footer-socials">
+          <a href="#" aria-label="Facebook"  title="Facebook">Fb</a>
+          <a href="#" aria-label="Instagram" title="Instagram">Ig</a>
+          <a href="#" aria-label="WhatsApp"  title="WhatsApp">Wa</a>
+          <a href="#" aria-label="YouTube"   title="YouTube">Yt</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h5>Shop</h5>
+        <ul>
+          <li><a href="#varieties">All Varieties</a></li>
+          <li><a href="#varieties">Himsagor</a></li>
+          <li><a href="#varieties">Amrupali</a></li>
+          <li><a href="#varieties">Langra</a></li>
+          <li><a href="#varieties">Khirshapat</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h5>Company</h5>
+        <ul>
+          <li><a href="#why">About Us</a></li>
+          <li><a href="#process">Our Process</a></li>
+          <li><a href="#reviews">Reviews</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h5>Help</h5>
+        <ul>
+          <li><a href="#">Delivery Info</a></li>
+          <li><a href="#">Return Policy</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>© 2025 Rajshahi Mango. All rights reserved.</div>
+      <div>Designed with ❤️ in Bangladesh</div>
+    </div>
+  </footer>
+
+  <!-- ══════════════════════════════════════
+       FLOATING WHATSAPP BUTTON
+  ══════════════════════════════════════ -->
+  <a href="https://wa.me/8801234567890?text=হ্যালো!%20আমি%20আম%20অর্ডার%20করতে%20চাই।"
+     target="_blank"
+     rel="noopener"
+     class="whatsapp-float"
+     aria-label="Chat on WhatsApp">
+    💬
+  </a>
+  <div class="whatsapp-float-tooltip">Order via WhatsApp</div>
+
+  <!-- ══════════════════════════════════════
+       BACK TO TOP BUTTON
+  ══════════════════════════════════════ -->
+  <button class="back-to-top" id="backToTop" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    ↑
+  </button>
+
+  <script src="script.js"></script>
+
+  <!-- Back to top visibility toggle -->
+  <script>
+    const btt = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      btt.classList.toggle('visible', window.scrollY > 400);
+    }, { passive: true });
+  </script>
+
+</body>
 </html>
-
-```
