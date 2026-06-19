@@ -325,7 +325,21 @@
       </div>
 
       <!-- Cards injected by script.js -->
-      <div class="products-grid" id="productsGrid"></div>
+<div class="filter-bar" id="filterBar">
+  <button class="filter-btn active" data-filter="all">All <span class="filter-count" id="countAll"></span></button>
+  <button class="filter-btn" data-filter="available">Available Now</button>
+  <button class="filter-btn" data-filter="preorder">Pre-order</button>
+  <button class="filter-btn" data-filter="early">Early Season</button>
+  <button class="filter-btn" data-filter="mid">Mid Season</button>
+  <button class="filter-btn" data-filter="late">Late Season</button>
+  <select class="sort-select" id="sortSelect">
+    <option value="default">Sort: Default</option>
+    <option value="price-asc">Price: Low → High</option>
+    <option value="price-desc">Price: High → Low</option>
+    <option value="name-asc">Name: A → Z</option>
+  </select>
+</div>
+<div class="products-grid" id="productsGrid"></div>
     </div>
   </section>
 
