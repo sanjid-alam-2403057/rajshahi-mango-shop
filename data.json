@@ -3,60 +3,90 @@
     "id": "himsagor-01",
     "name": "Himsagor",
     "nameBn": "হিমসাগর",
-    "tags": [
-      "Sweet",
-      "Fiberless"
-    ],
-    "description": "The king of mangoes. Known for its unmatched sweetness and completely fiberless texture.",
+    "tags": ["Sweet", "Fiberless", "Most Popular"],
+    "description": "The king of Rajshahi mangoes. Unmatched sweetness, completely fiberless texture, and an intoxicating aroma that fills the room.",
     "price": 120,
     "unit": "/ kg",
-    "badge": "Available",
+    "badge": "Best Seller",
     "badgeColor": "green",
-    "icon": "🥭"
+    "icon": "🥭",
+    "bgClass": "bg-himsagor",
+    "season": "Early Season",
+    "available": true
   },
   {
     "id": "amrupali-01",
     "name": "Amrupali",
     "nameBn": "আম্রপালি",
-    "tags": [
-      "Juicy",
-      "Aromatic"
-    ],
-    "description": "A very sweet, small to medium-sized mango with a deep orange, fiberless flesh.",
+    "tags": ["Juicy", "Aromatic", "Deep Orange"],
+    "description": "A hybrid favourite with deep orange fiberless flesh, rich sweetness, and a longer shelf life — perfect for gifting.",
     "price": 100,
     "unit": "/ kg",
     "badge": "Available",
     "badgeColor": "green",
-    "icon": "🥭"
+    "icon": "🥭",
+    "bgClass": "bg-amrupali",
+    "season": "Mid Season",
+    "available": true
   },
   {
     "id": "langra-01",
     "name": "Langra",
-    "nameBn": "ল্যাংড়া",
-    "tags": [
-      "Classic",
-      "Rich Taste"
-    ],
-    "description": "Famous for retaining its green color even when ripe. Extremely juicy with a unique aroma.",
+    "nameBn": "ল্যাংড়া",
+    "tags": ["Classic", "Rich Taste", "Stays Green"],
+    "description": "Famous for retaining its green skin even when perfectly ripe. Extremely juicy with a bold, unique aroma unlike any other variety.",
     "price": 110,
     "unit": "/ kg",
     "badge": "Pre-order",
     "badgeColor": "orange",
-    "icon": "🥭"
+    "icon": "🥭",
+    "bgClass": "bg-langra",
+    "season": "Mid Season",
+    "available": false
   },
   {
     "id": "khirshapat-01",
     "name": "Khirshapat",
     "nameBn": "ক্ষীরশাপাত",
-    "tags": [
-      "Premium",
-      "Traditional"
-    ],
-    "description": "One of the most popular and premium varieties from Rajshahi, highly sought after for its rich, creamy flavor.",
+    "tags": ["Premium", "Traditional", "Creamy"],
+    "description": "One of the most premium and sought-after varieties from Rajshahi. Rich, creamy flavour with a paper-thin skin and honeyed fragrance.",
     "price": 130,
     "unit": "/ kg",
     "badge": "Coming Soon",
     "badgeColor": "gray",
-    "icon": "🥭"
+    "icon": "🥭",
+    "bgClass": "bg-khirshapat",
+    "season": "Early Season",
+    "available": false
+  },
+  {
+    "id": "fazli-01",
+    "name": "Fazli",
+    "nameBn": "ফজলি",
+    "tags": ["Large Size", "Mild Sweet", "Family Pack"],
+    "description": "Bangladesh's largest mango variety. Mildly sweet with a gentle fragrance — ideal for large family gatherings and sharing.",
+    "price": 90,
+    "unit": "/ kg",
+    "badge": "Available",
+    "badgeColor": "green",
+    "icon": "🥭",
+    "bgClass": "bg-fazli",
+    "season": "Late Season",
+    "available": true
+  },
+  {
+    "id": "gopalbhog-01",
+    "name": "Gopalbhog",
+    "nameBn": "গোপালভোগ",
+    "tags": ["Musky Aroma", "Small Seed", "Velvety"],
+    "description": "An early-season treasure with a distinctive musky sweetness, velvety texture, and a tiny seed that means more flesh for you.",
+    "price": 140,
+    "unit": "/ kg",
+    "badge": "Pre-order",
+    "badgeColor": "orange",
+    "icon": "🥭",
+    "bgClass": "bg-gopalbhog",
+    "season": "Early Season",
+    "available": false
   }
 ]
