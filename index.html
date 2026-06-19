@@ -597,7 +597,104 @@
   <button class="back-to-top" id="backToTop" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
     ↑
   </button>
+<!-- ══════════════════════════════════════
+     CART / CHECKOUT MODAL
+══════════════════════════════════════ -->
+<div class="modal-overlay" id="cartModal" role="dialog" aria-modal="true" aria-label="Checkout">
 
+  <div class="modal-box">
+
+    <!-- Header -->
+    <div class="modal-header">
+      <h2 class="modal-title">🛒 Your Order</h2>
+      <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+    </div>
+
+    <!-- STEP 1: Cart Items -->
+    <div class="modal-step" id="stepCart">
+      <div class="cart-items" id="cartItems"></div>
+      <div class="cart-empty" id="cartEmpty" style="display:none;">
+        <p>Your cart is empty.<br>Add some mangoes first! 🥭</p>
+      </div>
+      <div class="cart-total-row" id="cartTotalRow">
+        <span>Total</span>
+        <strong id="cartTotal">৳0</strong>
+      </div>
+      <button class="btn-primary w-full" id="btnProceed">Proceed to Checkout →</button>
+    </div>
+
+    <!-- STEP 2: Customer Details Form -->
+    <div class="modal-step" id="stepForm" style="display:none;">
+      <button class="btn-back" id="btnBack">← Back to Cart</button>
+
+      <div class="form-group">
+        <label class="form-label">Full Name *</label>
+        <input type="text" class="form-input" id="fName" placeholder="আপনার নাম লিখুন" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Phone Number *</label>
+        <input type="tel" class="form-input" id="fPhone" placeholder="01XXXXXXXXX" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Delivery Address *</label>
+        <textarea class="form-input form-textarea" id="fAddress" placeholder="বাড়ি নম্বর, রাস্তা, এলাকা..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">District *</label>
+        <select class="form-input form-select" id="fDistrict">
+          <option value="">-- Select District --</option>
+          <option>Dhaka</option><option>Chittagong</option><option>Sylhet</option>
+          <option>Rajshahi</option><option>Khulna</option><option>Barisal</option>
+          <option>Rangpur</option><option>Mymensingh</option><option>Comilla</option>
+          <option>Narayanganj</option><option>Gazipur</option><option>Bogura</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Payment Method *</label>
+        <div class="payment-options">
+          <label class="pay-opt">
+            <input type="radio" name="payment" value="Cash on Delivery" checked /> Cash on Delivery
+          </label>
+          <label class="pay-opt">
+            <input type="radio" name="payment" value="bKash" /> bKash
+          </label>
+          <label class="pay-opt">
+            <input type="radio" name="payment" value="Nagad" /> Nagad
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Note (optional)</label>
+        <input type="text" class="form-input" id="fNote" placeholder="কোনো বিশেষ নির্দেশনা?" />
+      </div>
+
+      <div class="order-summary-mini" id="orderSummaryMini"></div>
+
+      <button class="btn-primary w-full" id="btnSubmit">
+        ✅ Place Order
+      </button>
+      <p class="form-disclaimer">আপনার তথ্য সম্পূর্ণ নিরাপদ। We'll confirm via call/WhatsApp.</p>
+    </div>
+
+    <!-- STEP 3: Success -->
+    <div class="modal-step" id="stepSuccess" style="display:none;">
+      <div class="success-screen">
+        <div class="success-icon">🥭</div>
+        <h3 class="success-title">অর্ডার সফল হয়েছে!</h3>
+        <p class="success-sub">Order placed successfully</p>
+        <div class="success-id" id="successOrderId"></div>
+        <div class="success-details" id="successDetails"></div>
+        <p class="success-note">
+          আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব।<br>
+          We'll contact you soon to confirm your order.
+        </p>
+        <button class="btn-primary w-full" id="btnDone">Done</button>
+      </div>
+    </div>
+
+  </div>
+</div>
   <script src="script.js"></script>
 
   <!-- Back to top visibility toggle -->
