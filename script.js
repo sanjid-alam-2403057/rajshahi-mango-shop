@@ -247,7 +247,7 @@ function setupRipple() {
         if (existing) {
           existing.qty += 1;
         } else {
-          cart.push({ id, name, price, qty: 1 });
+         cart.push({ id, name, price, qty: cardQtys[id] || 1 });
         }
 
         updateCartBadge();
