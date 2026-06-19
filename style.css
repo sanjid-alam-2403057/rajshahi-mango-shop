@@ -1790,3 +1790,126 @@ footer {
   .modal-step { padding: 18px 18px 24px; }
   .payment-options { flex-direction: column; }
 }
+/* FILTER BAR */
+.filter-bar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 36px;
+  align-items: center;
+}
+.filter-btn {
+  padding: 8px 20px;
+  border-radius: 40px;
+  border: 1.5px solid rgba(90,61,30,0.15);
+  background: var(--white);
+  color: var(--bark);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.22s var(--ease-spring);
+  font-family: var(--body);
+  letter-spacing: 0.03em;
+}
+.filter-btn:hover {
+  border-color: var(--honey);
+  color: var(--honey);
+  transform: translateY(-2px);
+}
+.filter-btn.active {
+  background: var(--honey);
+  color: var(--white);
+  border-color: var(--honey);
+  box-shadow: 0 4px 14px rgba(200,131,26,0.30);
+}
+.sort-select {
+  margin-left: auto;
+  padding: 8px 16px;
+  border-radius: 40px;
+  border: 1.5px solid rgba(90,61,30,0.15);
+  background: var(--white);
+  color: var(--bark);
+  font-size: 0.78rem;
+  font-weight: 600;
+  font-family: var(--body);
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.22s;
+}
+.sort-select:focus { border-color: var(--honey); }
+
+/* RIPPLE */
+.p-btn { position: relative; overflow: hidden; }
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.40);
+  transform: scale(0);
+  animation: rippleAnim 0.55s linear;
+  pointer-events: none;
+}
+@keyframes rippleAnim {
+  to { transform: scale(4); opacity: 0; }
+}
+
+/* CARD QUANTITY PICKER (shown on hover) */
+.p-qty-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.25s var(--ease), transform 0.25s var(--ease);
+}
+.p-card:hover .p-qty-row { opacity: 1; transform: translateY(0); }
+.p-qty-label {
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.p-qty-btn {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: var(--linen);
+  border: none;
+  color: var(--bark);
+  font-size: 1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.18s, transform 0.18s var(--ease-spring);
+  line-height: 1;
+  font-family: var(--body);
+}
+.p-qty-btn:hover { background: var(--honey); color: var(--white); transform: scale(1.15); }
+.p-qty-val {
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--soil);
+  min-width: 18px;
+  text-align: center;
+}
+
+/* NO RESULTS MESSAGE */
+.no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+.no-results span { font-size: 2.5rem; display: block; margin-bottom: 12px; }
+
+/* CARD COUNT BADGE */
+.filter-count {
+  font-size: 0.70rem;
+  color: var(--muted);
+  margin-left: 4px;
+  font-weight: 400;
+}
