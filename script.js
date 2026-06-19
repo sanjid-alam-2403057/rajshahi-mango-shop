@@ -70,7 +70,9 @@ document.addEventListener('DOMContentLoaded', () => {
           productsGrid.insertAdjacentHTML('beforeend', cardHTML);
         });
 
-        setupCartHandlers();
+        allProducts = products;
+        renderProducts(products);
+        setupFilterBar();
         setupWhatsAppHandlers();
         setupScrollReveal();
       })
