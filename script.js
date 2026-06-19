@@ -243,12 +243,13 @@ function setupRipple() {
         const name  = this.dataset.name;
         const price = parseInt(this.dataset.price);
 
-        const existing = cart.find(item => item.id === id);
-        if (existing) {
-          existing.qty += 1;
-        } else {
-         cart.push({ id, name, price, qty: cardQtys[id] || 1 });
-        }
+       const existing = cart.find(item => item.id === id);
+if (existing) {
+  existing.qty += cardQtys[id] || 1;
+} else {
+  cart.push({ id, name, price, qty: cardQtys[id] || 1 });
+}
+         
 
         updateCartBadge();
         showAddedFeedback(this);
