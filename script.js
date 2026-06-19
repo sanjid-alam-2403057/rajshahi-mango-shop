@@ -1,3 +1,9 @@
+// ════════════════════════════════════════════════════════
+// CONFIG — your deployed Apps Script URL
+// ════════════════════════════════════════════════════════
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx6ZUIZt9aYwPV9C6PLJZDue1uBZOAOVHQwJsIIFnZ4SeFyY41L_W00x7pPIO6YYRIrQg/exec';
+
+
 document.addEventListener('DOMContentLoaded', () => {
 
   // ════════════════════════════════════════════════════════
@@ -6,8 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const productsGrid = document.getElementById('productsGrid');
 
   if (productsGrid) {
-
-    // Show skeleton loaders while fetching
     showSkeletons(productsGrid, 6);
 
     fetch('data.json')
@@ -23,12 +27,10 @@ document.addEventListener('DOMContentLoaded', () => {
             .map(tag => `<span class="p-tag">${tag}</span>`)
             .join('');
 
-          // Disable button and change label for unavailable products
           const btnLabel    = product.available ? 'Add to Cart' : product.badge;
           const btnDisabled = product.available ? '' : 'disabled';
           const btnStyle    = product.available ? '' : 'style="background: var(--badge-gray); cursor: not-allowed; box-shadow: none;"';
 
-          // Season tag shown as small label on card
           const seasonHTML = product.season
             ? `<span class="p-season">${product.season}</span>`
             : '';
@@ -68,7 +70,6 @@ document.addEventListener('DOMContentLoaded', () => {
           productsGrid.insertAdjacentHTML('beforeend', cardHTML);
         });
 
-        // Wire up interactions after cards are in the DOM
         setupCartHandlers();
         setupWhatsAppHandlers();
         setupScrollReveal();
@@ -83,7 +84,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
   } else {
-    // No products grid on this page — still run reveal for static elements
     setupScrollReveal();
   }
 
@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // ════════════════════════════════════════════════════════
-  // 3. CART SYSTEM
+  // 3. CART STATE
   // ════════════════════════════════════════════════════════
   let cart = [];
 
@@ -121,7 +121,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const name  = this.dataset.name;
         const price = parseInt(this.dataset.price);
 
-        // Add to cart array
         const existing = cart.find(item => item.id === id);
         if (existing) {
           existing.qty += 1;
@@ -131,6 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         updateCartBadge();
         showAddedFeedback(this);
+        renderCartModal();
       });
     });
   }
@@ -140,7 +140,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let badge = document.getElementById('cartBadge');
 
     if (!badge) {
-      // Create badge on first add
       const navBtn = document.querySelector('.btn-nav');
       if (navBtn) {
         badge = document.createElement('span');
@@ -167,10 +166,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (badge) {
       badge.textContent = total;
-      // Pop animation
       badge.style.transform = 'scale(1.5)';
       setTimeout(() => badge.style.transform = 'scale(1)', 200);
       badge.style.transition = 'transform 0.2s cubic-bezier(0.34,1.56,0.64,1)';
+
+      // Make nav button open cart on click
+      const navBtn = document.querySelector('.btn-nav');
+      if (navBtn && !navBtn.dataset.cartWired) {
+        navBtn.dataset.cartWired = 'true';
+        navBtn.addEventListener('click', (e) => {
+          if (cart.length > 0) {
+            e.preventDefault();
+            openModal();
+          }
+        });
+      }
     }
   }
 
@@ -191,14 +201,258 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // ════════════════════════════════════════════════════════
-  // 4. WHATSAPP ORDER HANDLER
+  // 4. CART MODAL — render & open/close
+  // ════════════════════════════════════════════════════════
+  const modal       = document.getElementById('cartModal');
+  const modalClose  = document.getElementById('modalClose');
+  const stepCart    = document.getElementById('stepCart');
+  const stepForm    = document.getElementById('stepForm');
+  const stepSuccess = document.getElementById('stepSuccess');
+
+  function openModal() {
+    renderCartModal();
+    showStep('cart');
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function showStep(step) {
+    stepCart.style.display    = step === 'cart'    ? '' : 'none';
+    stepForm.style.display    = step === 'form'    ? '' : 'none';
+    stepSuccess.style.display = step === 'success' ? '' : 'none';
+  }
+
+  // Close on overlay click or X button
+  if (modal) {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+  }
+  if (modalClose) modalClose.addEventListener('click', closeModal);
+
+  // Escape key closes modal
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  function renderCartModal() {
+    const cartItemsEl  = document.getElementById('cartItems');
+    const cartEmptyEl  = document.getElementById('cartEmpty');
+    const cartTotalRow = document.getElementById('cartTotalRow');
+    const cartTotalEl  = document.getElementById('cartTotal');
+    const btnProceed   = document.getElementById('btnProceed');
+
+    if (!cartItemsEl) return;
+
+    if (cart.length === 0) {
+      cartItemsEl.innerHTML  = '';
+      cartEmptyEl.style.display  = '';
+      cartTotalRow.style.display = 'none';
+      btnProceed.style.display   = 'none';
+      return;
+    }
+
+    cartEmptyEl.style.display  = 'none';
+    cartTotalRow.style.display = '';
+    btnProceed.style.display   = '';
+
+    cartItemsEl.innerHTML = cart.map(item => `
+      <div class="cart-item">
+        <div class="cart-item-icon">🥭</div>
+        <div class="cart-item-info">
+          <div class="cart-item-name">${item.name}</div>
+          <div class="cart-item-price">৳${item.price} / kg</div>
+        </div>
+        <div class="cart-item-controls">
+          <button class="qty-btn" data-action="dec" data-id="${item.id}">−</button>
+          <span class="qty-num">${item.qty}</span>
+          <button class="qty-btn" data-action="inc" data-id="${item.id}">+</button>
+        </div>
+        <div class="cart-item-subtotal">৳${item.price * item.qty}</div>
+      </div>
+    `).join('');
+
+    // Quantity buttons
+    cartItemsEl.querySelectorAll('.qty-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id     = btn.dataset.id;
+        const action = btn.dataset.action;
+        const item   = cart.find(i => i.id === id);
+        if (!item) return;
+
+        if (action === 'inc') {
+          item.qty += 1;
+        } else {
+          item.qty -= 1;
+          if (item.qty <= 0) cart = cart.filter(i => i.id !== id);
+        }
+
+        updateCartBadge();
+        renderCartModal();
+      });
+    });
+
+    const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+    cartTotalEl.textContent = '৳' + total;
+  }
+
+  // Proceed to form
+  const btnProceed = document.getElementById('btnProceed');
+  if (btnProceed) {
+    btnProceed.addEventListener('click', () => {
+      if (cart.length === 0) return;
+      renderOrderSummaryMini();
+      showStep('form');
+    });
+  }
+
+  // Back to cart
+  const btnBack = document.getElementById('btnBack');
+  if (btnBack) {
+    btnBack.addEventListener('click', () => showStep('cart'));
+  }
+
+  // Done button (success screen)
+  const btnDone = document.getElementById('btnDone');
+  if (btnDone) {
+    btnDone.addEventListener('click', () => {
+      cart = [];
+      updateCartBadge();
+      closeModal();
+    });
+  }
+
+  function renderOrderSummaryMini() {
+    const el = document.getElementById('orderSummaryMini');
+    if (!el) return;
+    const total = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+    const lines = cart.map(i => `<strong>${i.name}</strong> × ${i.qty} kg = ৳${i.price * i.qty}`).join('<br>');
+    el.innerHTML = lines + `<br><strong>Total: ৳${total}</strong>`;
+  }
+
+
+  // ════════════════════════════════════════════════════════
+  // 5. FORM SUBMISSION → APPS SCRIPT
+  // ════════════════════════════════════════════════════════
+  const btnSubmit = document.getElementById('btnSubmit');
+  if (btnSubmit) {
+    btnSubmit.addEventListener('click', submitOrder);
+  }
+
+  function submitOrder() {
+    // Collect & validate fields
+    const name    = document.getElementById('fName').value.trim();
+    const phone   = document.getElementById('fPhone').value.trim();
+    const address = document.getElementById('fAddress').value.trim();
+    const district = document.getElementById('fDistrict').value;
+    const note    = document.getElementById('fNote').value.trim();
+    const payment = document.querySelector('input[name="payment"]:checked')?.value || 'Cash on Delivery';
+
+    let valid = true;
+
+    function markError(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.add('error');
+        el.addEventListener('input', () => el.classList.remove('error'), { once: true });
+      }
+      valid = false;
+    }
+
+    if (!name)     markError('fName');
+    if (!phone || !/^[0-9+\-\s]{7,15}$/.test(phone)) markError('fPhone');
+    if (!address)  markError('fAddress');
+    if (!district) markError('fDistrict');
+
+    if (!valid) return;
+
+    // Build payload
+    const payload = {
+      action:        'placeOrder',
+      customerName:  name,
+      phone:         phone,
+      address:       address,
+      district:      district,
+      note:          note,
+      paymentMethod: payment,
+      items:         cart.map(item => ({
+        name:  item.name,
+        qty:   item.qty,
+        price: item.price,
+      })),
+    };
+
+    // Loading state
+    btnSubmit.classList.add('btn-loading');
+    btnSubmit.textContent = 'Placing Order…';
+    btnSubmit.disabled = true;
+
+    fetch(APPS_SCRIPT_URL, {
+      method:  'POST',
+      mode:    'no-cors',   // Apps Script requires no-cors
+      headers: { 'Content-Type': 'text/plain' },
+      body:    JSON.stringify(payload),
+    })
+    .then(() => {
+      // no-cors means we can't read the response body,
+      // so we assume success if no network error occurred
+      const orderId = 'RM-' + new Date().toISOString().slice(0,10).replace(/-/g,'') + '-' +
+        Math.random().toString(36).substring(2,6).toUpperCase();
+
+      showSuccessScreen({
+        orderId,
+        name,
+        phone,
+        total: cart.reduce((s, i) => s + i.price * i.qty, 0),
+        payment,
+        items: [...cart],
+      });
+    })
+    .catch(err => {
+      console.error('Order submission error:', err);
+      btnSubmit.classList.remove('btn-loading');
+      btnSubmit.textContent = '✅ Place Order';
+      btnSubmit.disabled = false;
+      alert('❌ Something went wrong. Please try via WhatsApp instead.');
+    });
+  }
+
+  function showSuccessScreen(order) {
+    document.getElementById('successOrderId').textContent = 'Order ID: ' + order.orderId;
+
+    const itemLines = order.items.map(i =>
+      `<strong>${i.name}</strong> × ${i.qty} kg = ৳${i.price * i.qty}`
+    ).join('<br>');
+
+    document.getElementById('successDetails').innerHTML =
+      itemLines +
+      `<br><strong>Total: ৳${order.total}</strong><br>` +
+      `Payment: ${order.payment}<br>` +
+      `Phone: ${order.phone}`;
+
+    showStep('success');
+
+    // Reset button for if they open modal again
+    btnSubmit.classList.remove('btn-loading');
+    btnSubmit.textContent = '✅ Place Order';
+    btnSubmit.disabled = false;
+  }
+
+
+  // ════════════════════════════════════════════════════════
+  // 6. WHATSAPP ORDER HANDLER
   // ════════════════════════════════════════════════════════
   function setupWhatsAppHandlers() {
     document.querySelectorAll('.p-whatsapp-btn').forEach(btn => {
       btn.addEventListener('click', function () {
         const name  = this.dataset.name;
         const price = this.dataset.price;
-        const phone = '8801234567890'; // ← Replace with your WhatsApp number
+        const phone = '8801863232179';
         const msg   = encodeURIComponent(
           `হ্যালো! আমি ${name} আম অর্ডার করতে চাই।\nদাম: ৳${price}/kg\n\nআমার অর্ডার কনফার্ম করুন।`
         );
@@ -209,7 +463,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // ════════════════════════════════════════════════════════
-  // 5. STICKY NAV SHADOW ON SCROLL
+  // 7. STICKY NAV
   // ════════════════════════════════════════════════════════
   const mainNav = document.getElementById('mainNav');
   if (mainNav) {
@@ -220,7 +474,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // ════════════════════════════════════════════════════════
-  // 6. MOBILE MENU TOGGLE
+  // 8. MOBILE MENU TOGGLE
   // ════════════════════════════════════════════════════════
   const navToggle  = document.getElementById('navToggle');
   const mobileMenu = document.getElementById('mobileMenu');
@@ -241,7 +495,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // ════════════════════════════════════════════════════════
-  // 7. SCROLL REVEAL  (called only ONCE, after DOM is ready)
+  // 9. SCROLL REVEAL
   // ════════════════════════════════════════════════════════
   function setupScrollReveal() {
     const srEls = document.querySelectorAll('.sr:not(.in)');
@@ -250,14 +504,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (!entry.isIntersecting) return;
-
-        // Stagger siblings within the same parent grid/row
         const parent   = entry.target.parentElement;
         const siblings = parent.querySelectorAll('.sr:not(.in)');
         siblings.forEach((sib, idx) => {
           setTimeout(() => sib.classList.add('in'), idx * 90);
         });
-
         entry.target.classList.add('in');
         observer.unobserve(entry.target);
       });
@@ -270,14 +521,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 // ════════════════════════════════════════════════════════
-// 8. NEWSLETTER / SUBSCRIBE FORM
+// 10. NEWSLETTER / SUBSCRIBE FORM
 // Global scope — called via inline onclick in index.html
 // ════════════════════════════════════════════════════════
 function handleSubscribe(btn) {
   const input = btn.previousElementSibling;
   const value = input.value.trim();
 
-  // Basic validation — must look like a phone or email
   const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
   const isPhone = /^[0-9+\-\s]{7,15}$/.test(value);
 
@@ -285,7 +535,6 @@ function handleSubscribe(btn) {
     input.style.borderColor = '#E84040';
     input.placeholder = '⚠ Enter a valid email or phone number';
     input.focus();
-    // Reset border after 2s
     setTimeout(() => {
       input.style.borderColor = '';
       input.placeholder = 'Email or Phone Number';
@@ -293,7 +542,6 @@ function handleSubscribe(btn) {
     return;
   }
 
-  // Success state
   const origText = btn.textContent;
   btn.textContent  = '✓ Subscribed!';
   btn.disabled     = true;
