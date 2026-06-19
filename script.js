@@ -740,7 +740,12 @@ function handleSubscribe(btn) {
     }, 2500);
     return;
   }
-
+fetch(APPS_SCRIPT_URL, {
+  method: 'POST',
+  mode: 'no-cors',
+  headers: { 'Content-Type': 'text/plain' },
+  body: JSON.stringify({ action: 'subscribe', contact: value }),
+});
   const origText = btn.textContent;
   btn.textContent  = '✓ Subscribed!';
   btn.disabled     = true;
